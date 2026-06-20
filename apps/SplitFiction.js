@@ -2,6 +2,7 @@ import { App, Render, Version } from '#components'
 import { api, utils } from '#models'
 import { join } from 'path'
 import axios from 'axios'
+import { getProxyAgent } from '../models/utils/request.js'
 
 const appInfo = {
   id: 'SplitFiction',
@@ -22,7 +23,7 @@ const rule = {
       if (!body) return 'Steam云存档中没有找到双影奇境的存档数据哦,先上传到Steam云存档吧'
       const urlReg = /<a\s*href="(.*)">/
       const url = urlReg.exec(body)[1]
-      const data = (await axios.get(url)).data
+      const data = (await axios.get(url, getProxyAgent())).data
       const nickname = await utils.bot.getUserName(e.self_id, uid, e.group_id)
       const profileCounter = [
         `总跳跃次数: ${data['ProfileCounter.TotalJumps']}`

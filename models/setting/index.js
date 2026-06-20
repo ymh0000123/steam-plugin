@@ -13,11 +13,11 @@ export const cfgSchema = {
         component: 'GTags'
       },
       proxy: {
-        title: 'proxy代理',
+        title: '代理地址',
         key: 'proxy',
         type: 'string',
         def: '',
-        desc: '用于加速访问'
+        desc: 'HTTP/SOCKS5代理地址,用于加速访问Steam。如Clash: http://127.0.0.1:7890'
       },
       commonProxy: {
         title: '通用反代',

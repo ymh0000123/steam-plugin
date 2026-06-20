@@ -2,6 +2,7 @@ import { App, Config, Render } from '#components'
 import { api, utils } from '#models'
 import axios from 'axios'
 import moment from 'moment'
+import { getProxyAgent } from '../models/utils/request.js'
 
 const appInfo = {
   id: 'charts',
@@ -170,7 +171,8 @@ const rule = {
       const baseURL = api.store.getBaseURL()
       const yearHtml = await axios.get('charts/bestofyear/bestof' + year, {
         baseURL,
-        timeout: Config.steam.timeout * 1000
+        timeout: Config.steam.timeout * 1000,
+        ...getProxyAgent()
       }).then(res => res.data)
       const announcementGid = /ANNOUNCEMENT_GID&quot;:&quot;(\d+)/.exec(yearHtml)?.[1]
       if (!announcementGid) {

@@ -3,6 +3,7 @@ import axios from 'axios'
 import { utils } from '#models'
 import { segment } from '#lib'
 import { Version } from '#components'
+import { getProxyAgent } from '../utils/request.js'
 import { basename, join } from 'path'
 import { execSync } from 'child_process'
 import { loadImage, createCanvas, shortenText, toImage } from './canvas.js'
@@ -126,7 +127,7 @@ export async function render (data) {
     // 先保存头像 头像框 背景图
     const tempPaths = await Promise.all(saveKeys.map(async key => {
       if (data[key]) {
-        return await axios.get(data[key], { responseType: 'arraybuffer' }).then(res => {
+        return await axios.get(data[key], { responseType: 'arraybuffer', ...getProxyAgent() }).then(res => {
           const ext = res.headers['content-type'].split('/').pop()
           const path = join(data.tempPath, `${key}.${ext}`)
           fs.writeFileSync(path, res.data)

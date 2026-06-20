@@ -54,8 +54,7 @@ export default async function request (url, options = {}, retry = { count: 0, ke
   return await axios.request({
     url,
     baseURL,
-    httpAgent: Config.steam.proxy ? new HttpProxyAgent(Config.steam.proxy) : undefined,
-    httpsAgent: Config.steam.proxy ? new HttpsProxyAgent(Config.steam.proxy) : undefined,
+    ...getProxyAgent(),
     ...options,
     params: {
       key: key || undefined,
@@ -107,6 +106,18 @@ export async function post (url, options = {}) {
     ...options,
     method: 'POST'
   })
+}
+
+/**
+ * 获取代理agent
+ * @returns {import('axios').AxiosRequestConfig}
+ */
+export function getProxyAgent () {
+  if (!Config.steam.proxy) return {}
+  return {
+    httpAgent: new HttpProxyAgent(Config.steam.proxy),
+    httpsAgent: new HttpsProxyAgent(Config.steam.proxy)
+  }
 }
 
 async function getKey (keys = Config.steam.apiKey) {

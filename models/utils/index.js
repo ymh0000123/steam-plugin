@@ -4,6 +4,7 @@ import moment from 'moment'
 import { join } from 'path'
 import { logger } from '#lib'
 import { Version } from '#components'
+import { getProxyAgent } from './request.js'
 
 export * as bot from './bot.js'
 export * as steam from './steam.js'
@@ -52,7 +53,8 @@ export async function getImgUrlBuffer (url, retry = 3) {
   for (let i = 0; i < retry; i++) {
     try {
       const buffer = await axios.get(url, {
-        responseType: 'arraybuffer'
+        responseType: 'arraybuffer',
+        ...getProxyAgent()
       }).then(res => res.data)
       if (Version.BotName === 'Karin') {
         return `base64://${buffer.toString('base64')}`
@@ -79,7 +81,8 @@ export async function saveImg (url, retry = 3) {
     try {
       let ext = ''
       const buffer = await axios.get(url, {
-        responseType: 'arraybuffer'
+        responseType: 'arraybuffer',
+        ...getProxyAgent()
       }).then(res => {
         ext = res.headers['content-type']?.split('/')?.pop() || 'png'
         return res.data

@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { join } from 'path'
 import { Version } from '#components'
+import { getProxyAgent } from '../utils/request.js'
 
 export const canvasPKG = await (async () => {
   try {
@@ -30,7 +31,7 @@ const startTimeMap = new Map()
 export const loadImage = async (source, options = {}) => {
   try {
     if (source?.startsWith?.('http')) {
-      const buffer = (await axios.get(source, { responseType: 'arraybuffer', timeout: 5000 })).data
+      const buffer = (await axios.get(source, { responseType: 'arraybuffer', timeout: 5000, ...getProxyAgent() })).data
       return await canvasPKG.loadImage(buffer, options)
     } else {
       return await canvasPKG.loadImage(source, options)
